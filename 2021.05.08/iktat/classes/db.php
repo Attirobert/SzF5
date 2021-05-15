@@ -112,4 +112,33 @@ class Dbconnect
 
         return $success;
     }
+
+    /* Adatok listázása */
+    function showData($selected, $d1, $d2)
+    {
+        $tomb = [];
+        $res = $this->con->prepare("select * from letters where (ID_user = :Iduser) and (erkezett >= :d1) and (erkezett <= :d2)");
+        $res->bindparam('Iduser', $selected);
+        $res->bindparam('d1', $d1);
+        $res->bindparam('d2', $d2);
+        $res->execute();
+        while ($row = $res->fetch()) {
+            $tomb[] = $row;
+        }
+        return $tomb;
+    }
+
+    // User nevének kiolvasása
+    function getName($uid)
+    {
+        $tomb = null;
+        $res = $this->con->prepare("select Nev from users where ID_user = :idUser");
+        $res->bindparam('idUser', $uid);
+        $res->execute();
+        while ($row = $res->fetch()) {
+            $tomb[] = $row;
+        }
+        $ret = $tomb[0]["Nev"];
+        return $ret;
+    }
 }

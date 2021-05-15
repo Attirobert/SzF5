@@ -76,4 +76,40 @@ class Dbconnect
         $res->bindParam(':leiras', $leiras);
         $res->execute();
     }
+
+    // Felhasználó ellenőrzése
+    function nameValid($user)
+    {
+        $reserved = false;
+        $res = $this->con->prepare("select Nev from users where Nev=?");
+        $res->bindparam(1, $user);
+        $row = $res->execute();
+        $row = $res->fetch();
+        if ($row > 0)
+            return $reserved = true;
+    }
+
+    /* Jelszó hosszának ellenőrzése */
+    function pwdLength($pwd, $hossz)
+    {
+        $check = true;
+        if (strlen($pwd) < $hossz) {
+            $check = false;
+        }
+        return $check;
+    }
+
+    /* Regisztráció */
+    function Reg($user, $pwd, $admin)
+    {
+        $success = false;
+        $res = $this->con->prepare("insert into users(Nev,Jelszo, Admin) values(?,?,?)");
+        $res->bindparam(1, $user);
+        $res->bindparam(2, $pwd);
+        $res->bindparam(3, $admin);
+        $row = $res->execute();
+        if ($row > 0) $success = true;
+
+        return $success;
+    }
 }

@@ -11,6 +11,7 @@ if (isset($_SESSION["user"])) {
 }
 
 $hiba = "";
+$hossz = 6;
 
 if (isset($_POST["reg"])) {
 
@@ -37,7 +38,7 @@ if (isset($_POST["reg"])) {
     }
 
     /* A jelszavak hossza nem megfelelő */
-    if (!$db->pwdLength($pwd, 6)) {
+    if (!$db->pwdLength($pwd, $hossz)) {
         $hiba .= "<br>A jelszó rövid!";
     }
 
